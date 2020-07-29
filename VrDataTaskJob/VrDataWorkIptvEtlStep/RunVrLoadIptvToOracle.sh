@@ -23,8 +23,7 @@ F_MoveFileToOthPath '/data01/ExternalData/iptv/prov_sanxi_tmp/' '/data01/Externa
 # 执行入库脚本
 python ${Scriptpath}VrLoadIptvToOracle.py
 
-
-echo "calculate user daily time failed!"
-curl -i -X POST -H 'Content-type':'application/json' -d '{"message": "任务告警:计算每日时间程序出错"}' http://10.100.40.147:5000/dingtalk/v1.1/send/text
-
-
+# 任务失败则报警
+if [ $? -eq 1 ];then
+    F_ReturnDingtalkSMS 'IPTV【陕西】数据抽取失败'
+fi

@@ -50,3 +50,20 @@ done
 echo `date`' >>> '" END"
 }
 
+## 发送dingtalk告警信息
+## 参数1：钉钉机器人返回内容
+function F_ReturnDingtalkSMS() {
+
+    echo `date`"  Load IptvData To Oracle failed!"
+    #curl -i -X POST -H 'Content-type':'application/json' -d '{"message": "任务告警:IPTV【陕西】数据抽取失败"}' http://10.100.40.147:5000/dingtalk/v1.1/send/text
+    curl 'https://oapi.dingtalk.com/robot/send?access_token=8ba74d2da0914c1af5f00004a33281cd9ac003c5cdd33a6148f55484e61c3e73' \
+    -H 'Content-Type: application/json' \
+    -d '{"msgtype": "text","text": {"content": "任务告警:'$1'"}}'
+
+}
+
+## 记录运行日志信息到VrDataWorkLog
+## 参数1：VrDataTaskJob下的作业路径
+function getErrinfo(){
+    `nohup sh /home/bigdata/VrDataCenter/VrDataTaskJob/$1 > /dev/null 2 >/home/bigdata/VrDataCenter/VrDataTaskJob/VrDataWorkLog/VrDataWorkLog.log &`
+}
